@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import Navigation from "@/components/navigation";
 import EvaluationDetail from "./evaluation-detail";
-import { generateMockEvaluations } from "@/lib/mock-data";
+import { generateMockEvaluations } from "@/lib/server-mock-data";
 import { MockDataAlert } from "@/components/mock-data-alert";
 
 export default async function EvaluationDetailPage({
