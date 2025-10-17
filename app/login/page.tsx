@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,26 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart3, Eye, EyeOff } from "lucide-react";
 
+// Wrapper component with Suspense
 export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-blue-900">
+        <Card className="w-full max-w-md p-8">
+          <div className="flex justify-center">
+            <BarChart3 className="h-8 w-8 text-primary animate-pulse" />
+          </div>
+          <p className="text-center mt-4">Loading...</p>
+        </Card>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+// Login form component
+function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
@@ -96,6 +115,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  className="pr-10"
                 />
                 <button
                   type="button"
