@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import Navigation from "@/components/navigation";
 import DashboardContent from "./dashboard-content";
+import { generateMockEvaluations } from "@/lib/mock-data";
+import { MockDataAlert } from "@/components/mock-data-alert";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -28,11 +30,18 @@ export default async function DashboardPage() {
     console.error("Error fetching evaluations:", error);
   }
 
+  // If no real data, use mock data
+  const useMockData = !evaluations || evaluations.length === 0;
+  const displayData = useMockData 
+    ? generateMockEvaluations() 
+    : evaluations;
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
       <main className="container mx-auto p-6">
-        <DashboardContent evaluations={evaluations || []} />
+        {useMockData && <MockDataAlert />}
+        <DashboardContent evaluations={displayData} />
       </main>
     </div>
   );

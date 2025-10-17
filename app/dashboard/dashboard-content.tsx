@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Activity, TrendingUp, CheckCircle, Clock } from "lucide-react";
 
@@ -21,6 +23,18 @@ interface DashboardContentProps {
 }
 
 export default function DashboardContent({ evaluations }: DashboardContentProps) {
+  // State for showing the upload info
+  const [showUploadInfo, setShowUploadInfo] = useState(false);
+  
+  // Upload data handler
+  const handleUploadClick = () => {
+    setShowUploadInfo(true);
+    // Hide after 5 seconds
+    setTimeout(() => {
+      setShowUploadInfo(false);
+    }, 5000);
+  };
+  
   // Calculate KPIs
   const totalEvals = evaluations.length;
   const avgLatency = evaluations.length > 0
@@ -78,6 +92,15 @@ export default function DashboardContent({ evaluations }: DashboardContentProps)
       description: "Last 30 days",
       icon: Activity,
       color: "text-blue-600",
+      action: (
+        <Button 
+          className="ml-auto bg-blue-500 hover:bg-blue-600 text-white text-sm" 
+          size="sm" 
+          onClick={handleUploadClick}
+        >
+          Upload Data
+        </Button>
+      ),
     },
     {
       title: "Average Latency",
@@ -104,6 +127,16 @@ export default function DashboardContent({ evaluations }: DashboardContentProps)
 
   return (
     <div className="space-y-6">
+      {showUploadInfo && (
+        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <strong className="font-bold">Upload Data: </strong>
+          <span className="block sm:inline">
+            To upload real evaluation data, use our API endpoint: <code className="bg-green-100 px-1 py-0.5 rounded">/api/evals/ingest</code>. 
+            Check the documentation for more details or connect your AI agent directly.
+          </span>
+        </div>
+      )}
+    
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
         <p className="text-muted-foreground">
@@ -125,9 +158,12 @@ export default function DashboardContent({ evaluations }: DashboardContentProps)
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{kpi.value}</div>
-                <p className="text-xs text-muted-foreground">
-                  {kpi.description}
-                </p>
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-muted-foreground">
+                    {kpi.description}
+                  </p>
+                  {kpi.action && kpi.action}
+                </div>
               </CardContent>
             </Card>
           );

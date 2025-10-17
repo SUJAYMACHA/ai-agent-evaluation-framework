@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import Navigation from "@/components/navigation";
 import EvaluationsTable from "./evaluations-table";
+import { generateMockEvaluations } from "@/lib/mock-data";
+import { MockDataAlert } from "@/components/mock-data-alert";
 
 export default async function EvaluationsPage({
   searchParams,
@@ -33,18 +35,33 @@ export default async function EvaluationsPage({
   if (error) {
     console.error("Error fetching evaluations:", error);
   }
+  
+  // If no real data, use mock data
+  const useMockData = !evaluations || evaluations.length === 0;
+  const mockData = useMockData ? generateMockEvaluations() : [];
+  const mockCount = useMockData ? mockData.length : 0;
+  
+  // Paginate mock data
+  const paginatedMockData = useMockData 
+    ? mockData.slice(from, to + 1)
+    : [];
 
-  const totalPages = count ? Math.ceil(count / pageSize) : 0;
+  const totalPages = useMockData 
+    ? Math.ceil(mockCount / pageSize) 
+    : (count ? Math.ceil(count / pageSize) : 0);
+    
+  const displayData = useMockData ? paginatedMockData : evaluations || [];
 
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
       <main className="container mx-auto p-6">
+        {useMockData && <MockDataAlert />}
         <EvaluationsTable
-          evaluations={evaluations || []}
+          evaluations={displayData}
           currentPage={page}
           totalPages={totalPages}
-          totalCount={count || 0}
+          totalCount={useMockData ? mockCount : (count || 0)}
         />
       </main>
     </div>
