@@ -44,7 +44,7 @@ export default function LandingPage() {
                   Monitor and Improve Your AI Agent Performance
                 </h1>
                 <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                  Track metrics, identify trends, and enhance your AI's effectiveness with our comprehensive evaluation framework.
+                  Track metrics, identify trends, and enhance your AI&apos;s effectiveness with our comprehensive evaluation framework.
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row justify-center">
@@ -92,7 +92,7 @@ export default function LandingPage() {
                   <FileText className="h-12 w-12 text-primary mb-2" />
                   <h3 className="text-xl font-bold">Detailed Reporting</h3>
                   <p className="text-muted-foreground">
-                    Generate comprehensive reports to document your AI agent's performance.
+                    Generate comprehensive reports to document your AI agent&apos;s performance.
                   </p>
                 </CardContent>
               </Card>
